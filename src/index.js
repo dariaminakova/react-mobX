@@ -1,52 +1,137 @@
+import './index.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import * as serviceWorker from './serviceWorker';
-import DevTools from 'mobx-react-devtools';
-import { observable, computed, configure, action } from 'mobx';
+import { observable, computed, configure, action, decorate } from 'mobx';
 import { observer } from 'mobx-react';
+import DevTools from 'mobx-react-devtools';
+configure({ enforceActions: 'observed' });
 
-configure ({enforceActions: 'observed'})
+class Store {
+ devslist = [
+  {name: 'Jack', sp: 10},
+  {name: 'Mike', sp: 8},
+  {name: 'Lion', sp: 12},
+  {name: 'Sam', sp: 11},
+  {name: 'Dean', sp: 7},
+  {name: 'Cris', sp: 9}
+ ];
+ filter = '';
 
-const nickName = observable ({
-  firstName:'Piter',
-  age: 23,
+ get totalSum(){
+   return this.devslist.reduce((sum, {sp}) => sum+= sp, 0);
+ };
+ get topPerf(){
+  const maxSp = Math.max(...this.devslist.map(({sp}) => sp));
+  return this.devslist.find(({sp, name})=>{
+     if(maxSp === sp){
+       return name;
+     }
+   })
+  };
 
-get nickName () {
-  return `${this.firstName}${this.age}`;
-},
-increment (){this.age++},
-decrement (){this.age--}
-},{
-  increment: action ('plus one'),
-  decrement: action ('minus one')
-},{name: 'nickNameObservableObj'});
+  get filteredDev (){
+    const matchesFilter = new RegExp(this.filter, 'i');
+    return this.devslist.filter(({name}) => !this.filter || matchesFilter.test(name))
+  };
 
-// const todo = observable ([
-//   {text: 'make a cup of coffe'},
-//   {text: 'bring a glass of vine'}
-// ])
+  clearList(){
+    this.devslist = [];
+  };
+  addDeveloper(dev){
+    this.devslist.push(dev)
+  };
+  updateFilter(value){
+    this.filter = value;
+  }
 
-@observer class Counter extends Component {
+}
+decorate(Store, {
+  devslist: observable,
+  filter: observable,
+  totalSum: computed,
+  topPerf: computed,
+  filteredDev: computed,
+  clearList: action,
+  addDeveloper: action,
+  updateFilter: action
+})
 
-handleIncrement = () => {this.props.store.increment()}
-handleDecrement = () => {this.props.store.decrement()}
+const appStore = new Store();
 
+const Row = ({ data: { name, sp } }) => {
+  return (
+		<tr>
+    	<td>{name}</td>
+    	<td>{sp}</td>
+  	</tr>
+	);
+};
+
+@observer class Table extends Component {
   render() {
+    const { store } = this.props;
+
     return (
-      <div className="App">
-        <DevTools />
-        <h1>{this.props.store.nickName}</h1>
-        <h1>{this.props.store.age}</h1>
-        <button onClick={this.handleDecrement}>-1</button>
-        <button onClick={this.handleIncrement}>+1</button>
-        {/* {todo.map((task) => <p key={task.text}>{task.text}</p>)} */}
-      </div>
-    );
+      <table>
+        <thead>
+          <tr>
+            <td>Name:</td>
+            <td>SP:</td>
+          </tr>
+        </thead>
+        <tbody>
+          {store.filteredDev.map((dev, i) => <Row key={i} data={dev} />)}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Team SP:</td>
+            <td>{store.totalSum}</td>
+          </tr>
+          <tr>
+            <td>Top Performer:</td>
+            <td>{store.topPerf ? store.topPerf.name : ''}</td>
+          </tr>
+        </tfoot>
+      </table>
+		);
   }
 }
 
-ReactDOM.render(<Counter store={nickName}/>, document.getElementById('root'));
+@observer class Controls extends Component {
+  addDeveloper = () => {
+    const name = prompt("The name:");
+    const sp = parseInt(prompt("The story points:"), 10);
+    this.props.store.addDeveloper({ name, sp });
+  }
 
-// todo.push({text: 'make a cup of tea'})
+  clearList = () => { this.props.store.clearList(); }
 
-serviceWorker.unregister();
+  filterDevelopers = ({target: {value}}) => {
+    this.props.store.updateFilter(value);
+  }
+
+  render() {
+    return (
+			<div className="controls">
+      	<button onClick={this.clearList}>Clear table</button>
+      	<button onClick={this.addDeveloper}>Add record</button>
+        <input value={this.props.store.filter} onChange={this.filterDevelopers} />
+    	</div>
+		);
+  }
+}
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+				<DevTools />
+        <h1>Sprint Board:</h1>
+        <Controls store={appStore} />
+        <Table store={appStore} />
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<App store={Store} />, document.getElementById('root'));
