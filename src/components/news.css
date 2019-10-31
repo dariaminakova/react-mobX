@@ -1,0 +1,25 @@
+.content-box {
+	margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+	justify-content: flex-start;
+}
+
+.card{
+  margin-top: 20px;
+  width: 40%;
+  background-color: rgb(236, 236, 236);
+  min-height: 200px;
+}
+.link{
+  color: #ffab40;
+  margin-right: 24px;
+  -webkit-transition: color .3s ease;
+  transition: color .3s ease;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+hr {
+  color: 1px solid rgba(160,160,160,0.2);
+}

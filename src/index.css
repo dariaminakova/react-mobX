@@ -1,69 +1,43 @@
-body {
-  margin: 0;
-  padding: 5% 10%;
-  text-transform: uppercase;
-}
-
-body,
-button,
-thead td,
-input {
-	color: #000;
-	font-size: 1rem;
-  font-weight: bold;
-}
-
-input,
-button,
-td {
-	border: 2px solid #656565;
-	outline: none;
-}
-
-input,
-button {
-	width: 30%;
-	padding: 0.5rem 1rem;
-  box-sizing: border-box;
-  min-height: 40px;
-}
-
-.controls {
+body{
 	text-align: center;
-	margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
+	background-color: rgb(217, 233, 225);
+	color: rgb(10, 54, 40);
+}
+.controls {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-around;
 }
 
-table,
-h1 {
-	border-collapse: collapse;
-	width: 100%;
-}
-
-tbody tr td:last-of-type,
-tfoot td:last-of-type {
-	text-align: right;
-}
-
-h1 {
-	border-bottom: 3px solid #ccc;
-	margin-bottom: 1rem;
-}
-
-td {
+.country .category {
 	width: 50%;
-  padding: 0.5rem;
+	margin-left: auto;
+	left: auto;
+	right: auto;
 }
 
-tfoot td,
-thead td,
-h1 {
-	font-weight: bold;
-	color: #ff0000;
+select {
+	background-color: rgba(255,255,255,0.9);
+	width: 100%;
+	padding: 5px;
+	border: 1px solid #f2f2f2;
+	border-radius: 2px;
+	height: 3rem;
+}
+.select-box{
+	width: 48%;
 }
 
-tfoot td:first-of-type {
-	border: none;
-	text-align: right;
+button {
+	background-color: rgba(255,255,255,0.9);
+	width: 10%;
+	padding: 5px;
+	border: 1px solid #f2f2f2;
+	border-radius: 2px;
+	height: 3rem;
+}
+h1{
+text-transform: uppercase;
 }
