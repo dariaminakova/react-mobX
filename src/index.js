@@ -1,7 +1,7 @@
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { observable, configure, action, decorate, runInAction } from 'mobx';
+import { observable, configure, computed, action, decorate, runInAction } from 'mobx';
 import App from './App';
 
 configure({ enforceActions: 'observed' });
@@ -12,7 +12,11 @@ class Store {
   country = '';
   category = '';
   q = '';
-  news;
+  news = [];
+
+  get totalArticles(){
+    return this.news.length;
+  }
 
   getNews = () => {
     const url = this.apiUrl + 'country=' + this.country + '&apiKey=' + this.apiKey + '&category=' + this.category + '&q=' + this.q;
@@ -34,6 +38,7 @@ decorate(Store, {
   country: observable,
   category: observable,
   news: observable,
+  totalArticles: computed,
   updateCountry: action('Country selected'),
   updateCategory: action('Category selected'),
   getNews: action('Get news'),

@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import './components.css'
+import Card from './Card';
 
 @observer class NewsUi extends Component {
 
   render() {
     const {news} = this.props;
-    const showNews = news ? 
-    news.map((n) => <div className='card'><img className='card-img' src={n.urlToImage} alt='news'/><h3>{n.title}</h3><p>{n.description}</p><hr/><a className='link' href={n.url}>READ MORE</a></div> ): 
-    'HERE WILL BE YOUR NEWS' ;
+    const showNews = news.length ? 
+    news.map((n) => <Card key={n.url} urlToImage={n.urlToImage} title={n.title} description={n.description} url={n.url} />) : 'HERE WILL BE YOUR NEWS';
 
-    return (
-      <div className='content-box'>
-        {showNews}
-      </div>
-    )
+    return <div className='content-box'>{showNews}</div>
   }
 }
 

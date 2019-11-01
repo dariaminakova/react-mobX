@@ -1,7 +1,7 @@
 import './index.css';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import DevTools from 'mobx-react-devtools';
+// import DevTools from 'mobx-react-devtools';
 import NewsUi from './components/NewsUi';
 import Controls from './components/Controls';
 
@@ -40,8 +40,8 @@ import Controls from './components/Controls';
     const { store } = this.props;
     return (
       <div>
-        <DevTools />
-        <h1>Please choose your country and category</h1>
+        {/* <DevTools /> */}
+        <h1>{store.totalArticles? "You've got " + store.totalArticles + " articles under your request": "Please choose your country and category"}</h1>
         <div className="controls">
           <div className='select-box'>
             <Controls chooseOption={this.chooseCountry}
